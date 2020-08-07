@@ -1,23 +1,38 @@
 package encryptdecrypt;
 
-import java.util.Scanner;
-
 public class Main {
     private static final int CHARACTER_SPACE_IN_ASCII = ' '; // 32
     private static final int SUM_OF_CHARACTERS_FROM_SPACE_TO_TILDE = '~' + 1 - ' '; // 95 = 126 + 1 - 32
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        String operation = scanner.nextLine();
-        String message = scanner.nextLine();
-        int key = scanner.nextInt();
-        String encryptedMessage = "";
-        if ("enc".equals(operation)) {
-            encryptedMessage = encrypt(message, key);
-        } else if ("dec".equals(operation)) {
-            encryptedMessage = decrypt(message, key);
+        String operation = "enc";
+        String message = "";
+        int key = 0;
+
+        for (int i = 0; i < args.length; i++) {
+            switch (args[i]) {
+                case "-mode":
+                    operation = args[i + 1];
+                    break;
+                case "-key":
+                    key = Integer.parseInt(args[i + 1]);
+                    break;
+                case "-data":
+                    message = args[i + 1];
+                    break;
+            }
         }
-        System.out.println(encryptedMessage);
+
+        String ciphertext = "";
+        switch (operation) {
+            case "enc":
+                ciphertext = encrypt(message, key);
+                break;
+            case "dec":
+                ciphertext = decrypt(message, key);
+                break;
+        }
+        System.out.println(ciphertext);
     }
 
     private static String encrypt(String message, int key) {
